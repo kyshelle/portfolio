@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIM HYUNSEOP | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .project-card { transition: opacity 0.3s ease; }
+        .hidden-item { display: none; }
+        .active-filter { text-decoration: underline; text-underline-offset: 8px; font-weight: 600; }
+    </style>
+</head>
+<body class="bg-white text-stone-900 selection:bg-stone-200">
+
+    <nav class="fixed w-full p-8 flex justify-between items-center z-50 bg-white/80 backdrop-blur-sm">
+        <div class="text-xl font-bold tracking-tighter">KIM HYUNSEOP</div>
+        <div class="flex gap-8 text-sm uppercase tracking-widest">
+            <a href="#work" class="hover:text-stone-500">Work</a>
+            <a href="#about" class="hover:text-stone-500">About</a>
+            <a href="mailto:email@example.com" class="hover:text-stone-500">Contact</a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto">
+        <!-- Hero -->
+        <header class="mb-20">
+            <h1 class="text-6xl md:text-8xl mb-6">Designer.</h1>
+            <p class="text-xl md:text-2xl text-stone-500 max-w-2xl">
+                브랜드의 본질을 시각화하고, 사용자 경험의 접점을 설계합니다. 
+                웹과 그래픽 디자인을 아우르는 28개의 기록입니다.
+            </p>
+        </header>
+
+        <section id="work" class="mb-24">
+            <div class="flex gap-8 mb-12 border-b border-stone-200 pb-6">
+                <button onclick="filterProjects('all')" class="filter-btn active-filter" data-filter="all">All Works</button>
+                <button onclick="filterProjects('web')" class="filter-btn" data-filter="web">Web Design</button>
+                <button onclick="filterProjects('visual')" class="filter-btn" data-filter="visual">Visual Design</button>
+            </div>
+
+            <!-- Grid -->
+            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                <!-- Projects will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <section id="archive" class="border-t border-stone-200 pt-16">
+            <h2 class="text-3xl mb-12">Archive</h2>
+            <div id="archive-list" class="space-y-4">
+                <!-- Archive items will be injected by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const projects = [
+            // Featured Projects (8개)
+            { title: "Corporate Homepage A", category: "web", desc: "Corporate Site" },
+            { title: "Landing Page B", category: "web", desc: "Landing Page" },
+            { title: "Brand Identity X", category: "visual", desc: "BI/BX Design" },
+            { title: "Typography Study", category: "visual", desc: "Type Design" },
+            { title: "Eco Package", category: "visual", desc: "Package Design" },
+            { title: "Global Poster Series", category: "visual", desc: "Poster Design" },
+            { title: "Startup Web App", category: "web", desc: "Landing Page" },
+            { title: "Re-branding Project", category: "visual", desc: "BI/BX" },
+        ];
+
+        const archives = Array.from({ length: 20 }, (_, i) => ({
+            title: `Project ${i + 9}`,
+            category: i % 2 === 0 ? "web" : "visual"
+        }));
+
+        const grid = document.getElementById('project-grid');
+        const list = document.getElementById('archive-list');
+
+        function render() {
+            grid.innerHTML = projects.map(p => `
+                <div class="project-card" data-category="${p.category}">
+                    <div class="aspect-[3/4] bg-stone-100 mb-4 hover:bg-stone-200 transition-colors"></div>
+                    <h3 class="text-xl mb-1">${p.title}</h3>
+                    <p class="text-stone-500 text-sm uppercase tracking-wider">${p.desc}</p>
+                </div>
+            `).join('');
+
+            list.innerHTML = archives.map(p => `
+                <div class="flex justify-between py-4 border-b border-stone-100 archive-item" data-category="${p.category}">
+                    <span class="text-lg">${p.title}</span>
+                    <span class="text-stone-400 text-sm uppercase">${p.category === 'web' ? 'Web' : 'Visual'}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterProjects(cat) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active-filter', btn.dataset.filter === cat);
+            });
+
+            // Filter Grid
+            document.querySelectorAll('.project-card').forEach(card => {
+                const show = cat === 'all' || card.dataset.category === cat;
+                card.style.display = show ? 'block' : 'none';
+            });
+
+            // Filter Archive
+            document.querySelectorAll('.archive-item').forEach(item => {
+                const show = cat === 'all' || item.dataset.category === cat;
+                item.style.display = show ? 'flex' : 'none';
+            });
+        }
+
+        render();
+    </script>
+</body>
+</html>
